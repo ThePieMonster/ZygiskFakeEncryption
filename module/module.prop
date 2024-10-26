@@ -1,0 +1,6 @@
+id=zygisk_fake_encryption
+name=Zygisk Fake Encryption
+version=v1.0
+versionCode=10
+author=ThePieMonster
+description=Sets system property to show data partition is encrypted.

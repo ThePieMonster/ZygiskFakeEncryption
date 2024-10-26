@@ -1,0 +1,52 @@
+name: Zygisk CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  PROJECT_NAME: ZygiskFakeEncryption
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out
+      uses: actions/checkout@v4
+      with:
+        submodules: "recursive"
+        fetch-depth: 1
+
+    - name: Input Check
+      run: |
+        echo "github.event_name : ${{ github.event_name }}"
+        echo "github.event.action : ${{ github.event.action }}"
+        echo "github.ref : ${{ github.ref }}"
+        echo "github.event.pull_request.merged : ${{ github.event.pull_request.merged }}"
+        echo "github.event.number : ${{ github.event.number }}"
+
+    - name: ZIP Release
+      uses: thedoctor0/zip-release@0.7.5
+      with:
+        type: 'zip'
+        filename: '${{ env.PROJECT_NAME }}.zip'
+        exclusions: '*.git* /*node_modules/* .editorconfig README.md LICENSE'
+
+    - name : Extract ZIP & View Work Directory
+      working-directory : ${{ github.workspace }}/
+      run : | 
+        unzip ${{ env.PROJECT_NAME }}.zip -d ${{ github.workspace }}/work
+        echo "\nEcho ${{ github.workspace }}/work"
+        ls -la ${{ github.workspace }}/work
+        echo "\nEcho ${{ github.workspace }}/work/module"
+        ls -la ${{ github.workspace }}/work/module
+      
+    - name: Upload ${{ env.PROJECT_NAME }}.zip
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.PROJECT_NAME }}
+        path: ${{ github.workspace }}/work/module
