@@ -40,9 +40,9 @@ jobs:
       working-directory : ${{ github.workspace }}/
       run : | 
         unzip ${{ env.PROJECT_NAME }}.zip -d ${{ github.workspace }}/work
-        echo "\nEcho ${{ github.workspace }}/work"
+        echo -e "\nEcho ${{ github.workspace }}/work"
         ls -la ${{ github.workspace }}/work
-        echo "\nEcho ${{ github.workspace }}/work/module"
+        echo -e "\nEcho ${{ github.workspace }}/work/module"
         ls -la ${{ github.workspace }}/work/module
       
     - name: Upload ${{ env.PROJECT_NAME }}.zip
